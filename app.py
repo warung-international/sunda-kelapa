@@ -33,6 +33,7 @@ if OAUTH2_REDIRECT_URI.startswith("http://"):
 if OAUTH2_REDIRECT_URI.startswith("https://"):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "false"
 
+
 def token_updater(token):
     session["oauth2_token"] = token
 
@@ -84,13 +85,6 @@ def callback():
 @app.route("/authorized/")
 def authorized():
     return render_template("done.html")
-
-
-@app.route("/me")
-def me():
-    discord = make_session(token=session.get("oauth2_token"))
-    user = discord.get(API_BASE_URL + "/users/@me").json()
-    return jsonify(user=user)
 
 
 if __name__ == "__main__":
