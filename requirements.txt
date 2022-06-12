@@ -3,3 +3,4 @@ requests-oauthlib
 python-dotenv
 pymongo
 dnspython
+gunicorn
