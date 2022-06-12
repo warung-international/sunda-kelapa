@@ -1,6 +1,8 @@
 
 # Warung International Discord Gatekeeper
 
+[![Deploy to Heroku](https://github.com/warung-international/gatekeeper/actions/workflows/deploy.yml/badge.svg)](https://github.com/warung-international/gatekeeper/actions/workflows/deploy.yml)
+
 ## Create Application
 
 Head over to [discord developer site](https://discordapp.com/developers/applications/me) to create an application, and then save the `client id` and `client secret` to use in OAuth2 libraries as `client_id` and `client_secret`.
