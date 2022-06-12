@@ -9,9 +9,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    #environment:
-    #  name: 'Production'
-    #  url: 'https://robot.int.eu.org'
+    environment:
+      name: 'Production'
+      url: 'https://wi-oauth.herokuapp.com/'
     steps:
       - name: Checkout Github Actions
         uses: actions/checkout@v2
