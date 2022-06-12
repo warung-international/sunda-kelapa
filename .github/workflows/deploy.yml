@@ -1,0 +1,38 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    #environment:
+    #  name: 'Production'
+    #  url: 'https://robot.int.eu.org'
+    steps:
+      - name: Checkout Github Actions
+        uses: actions/checkout@v2
+      - name: Replace (.env)'s
+        uses: franzbischoff/replace_envs@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OAUTH2_CLIENT_ID: ${{ secrets.OAUTH2_CLIENT_ID }}
+          OAUTH2_CLIENT_SECRET: ${{ secrets.OAUTH2_CLIENT_SECRET }}
+          REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+        with:
+          from_file: '.env'
+          to_file: '.env'
+          commit: 'false'
+      - name: Push to Heroku
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          # Production 1
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          branch: master
