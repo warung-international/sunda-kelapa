@@ -30,6 +30,8 @@ app.config["SECRET_KEY"] = OAUTH2_CLIENT_SECRET
 if OAUTH2_REDIRECT_URI.startswith("http://"):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 
+if OAUTH2_REDIRECT_URI.startswith("https://"):
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "false"
 
 def token_updater(token):
     session["oauth2_token"] = token
