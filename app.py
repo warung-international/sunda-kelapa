@@ -101,12 +101,12 @@ def callback():
         guestbook.insert_one(
             {"uid": user_id, "username": user_name, "discrim": user_discriminator}
         )
+
+        # redirect user to the "done" page
+        return redirect(url_for("authorized"))
     else:
         # if user already registered, return error 400
         return abort(400)
-
-    # redirect user to the "done" page
-    return redirect(url_for("authorized"))
 
 
 @app.route("/authorized/")
