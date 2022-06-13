@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask import (
     Flask,
+    abort,
     g,
     jsonify,
     redirect,
@@ -93,10 +94,16 @@ def callback():
     user_name = user["username"]
     user_discriminator = user["discriminator"]
 
-    # and save the user to the database
-    guestbook.insert_one(
-        {"uid": user_id, "username": user_name, "discrim": user_discriminator}
-    )
+    # first, find if user already registered or not so there'll no duplicates
+    user_in_db = guestbook.find_one({"uid": user_id})
+    if user_in_db is None:
+        # if user never goes through verification, save the user object to the database
+        guestbook.insert_one(
+            {"uid": user_id, "username": user_name, "discrim": user_discriminator}
+        )
+    else:
+        # if user already registered, return error 400
+        return abort(400)
 
     # redirect user to the "done" page
     return redirect(url_for("authorized"))
