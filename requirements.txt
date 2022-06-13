@@ -1,6 +1,6 @@
-flask
-requests-oauthlib
-python-dotenv
-pymongo
 dnspython
+flask
 gunicorn
+pymongo
+python-dotenv
+requests-oauthlib
