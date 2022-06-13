@@ -11,6 +11,7 @@ from flask import (
     session,
     url_for,
 )
+from pymongo import MongoClient
 from requests_oauthlib import OAuth2Session
 
 load_dotenv()
@@ -32,6 +33,10 @@ if OAUTH2_REDIRECT_URI.startswith("http://"):
 
 if OAUTH2_REDIRECT_URI.startswith("https://"):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "false"
+
+cluster = MongoClient(os.getenv("MONGODB_URL"))
+
+guestbook = cluster["dagelan"]["guestbook"]
 
 
 def token_updater(token):
@@ -79,6 +84,21 @@ def callback():
         authorization_response=request.url,
     )
     session["oauth2_token"] = token
+
+    # get the user object from discord api
+    user = discord.get(API_BASE_URL + "/users/@me").json()
+
+    # then take what we need
+    user_id = user["id"]
+    user_name = user["username"]
+    user_discriminator = user["discriminator"]
+
+    # and save the user to the database
+    guestbook.insert_one(
+        {"uid": user_id, "username": user_name, "discrim": user_discriminator}
+    )
+
+    # redirect user to the "done" page
     return redirect(url_for("authorized"))
 
 
