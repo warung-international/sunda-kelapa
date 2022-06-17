@@ -91,22 +91,21 @@ def callback():
 
     # then take what we need
     user_id = user["id"]
-    user_name = user["username"]
-    user_discriminator = user["discriminator"]
+    username = user["username"]
+    discrim = user["discriminator"]
 
-    # first, find if user already registered or not so there'll no duplicates
+    # first, find if user already registered or not
     user_in_db = guestbook.find_one({"uid": user_id})
-    if user_in_db is None:
-        # if user never goes through verification, save the user object to the database
-        guestbook.insert_one(
-            {"uid": user_id, "username": user_name, "discrim": user_discriminator}
-        )
 
+    # checks
+    if user_in_db is None:
+        # if user never goes through verification, return error 400
+        return abort(400)
+    else:
+        # if user is in our discord server, change the status to True inside database
+        guestbook.update_one({"uid": member.id}, {"$set": {"verified": True}})
         # redirect user to the "done" page
         return redirect(url_for("authorized"))
-    else:
-        # if user already registered, return error 400
-        return abort(400)
 
 
 @app.route("/authorized/")
