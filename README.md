@@ -1,3 +1,5 @@
+# PROJECT DISCONTINUED
+Due to irl busy-ness, this project is discontinued until further notices.
 
 # Warung International Discord Gatekeeper
 
